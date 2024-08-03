@@ -11,15 +11,17 @@ namespace BetterPreview
 	{
 		private static ConfigEntry<int> maxSize;
 
+		private Harmony harmony;
+
 		private void Awake()
 		{
 			maxSize = Config.Bind("General", "MaxSize", 16, new ConfigDescription("Max size.", new AcceptableValueRange<int>(1, 64)));
-			Harmony.CreateAndPatchAll(typeof(MainPatch));
+			harmony = Harmony.CreateAndPatchAll(typeof(MainPatch));
 		}
 
 		private void OnDestroy()
 		{
-			Harmony.UnpatchAll();
+			harmony.UnpatchSelf();
 		}
 
 		public static class MainPatch
